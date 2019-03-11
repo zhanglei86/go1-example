@@ -13,7 +13,7 @@ func (exampleConsumerGroupHandler) Setup(_ sarama.ConsumerGroupSession) error   
 func (exampleConsumerGroupHandler) Cleanup(_ sarama.ConsumerGroupSession) error { return nil }
 func (h exampleConsumerGroupHandler) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
     for msg := range claim.Messages() {
-        fmt.Printf("Message topic:%q partition:%d offset:%d\n", msg.Topic, msg.Partition, msg.Offset)
+        fmt.Printf("Message topic:%q partition:%d offset:%d value==>%s\n", msg.Topic, msg.Partition, msg.Offset, msg.Value)
         sess.MarkMessage(msg, "")
     }
     return nil
@@ -33,7 +33,7 @@ func main() {
     defer func() { _ = client.Close() }()
 
     // Start a new consumer group
-    group, err := sarama.NewConsumerGroupFromClient("my-group", client)
+    group, err := sarama.NewConsumerGroupFromClient("myGroup", client)
     if err != nil {
         panic(err)
     }
@@ -49,7 +49,7 @@ func main() {
     // Iterate over consumer sessions.
     ctx := context.Background()
     for {
-        topics := []string{"my-topic"}
+        topics := []string{"myTopic"}
         handler := exampleConsumerGroupHandler{}
 
         err := group.Consume(ctx, topics, handler)

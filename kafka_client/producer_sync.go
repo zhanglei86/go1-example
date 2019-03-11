@@ -16,7 +16,7 @@ func main() {
       }
   }()
 
-  msg := &sarama.ProducerMessage{Topic: "my_topic", Value: sarama.StringEncoder("testing123")}
+  msg := &sarama.ProducerMessage{Topic: "myTopic", Value: sarama.StringEncoder("testing123")}
   partition, offset, err := producer.SendMessage(msg)
   if err != nil {
       log.Printf("FAILED to send message: %s\n", err)

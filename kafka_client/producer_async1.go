@@ -44,7 +44,7 @@ func main() {
 
   ProducerLoop:
   for {
-      message := &sarama.ProducerMessage{Topic: "my_topic", Value: sarama.StringEncoder("testing123")}
+      message := &sarama.ProducerMessage{Topic: "myTopic", Value: sarama.StringEncoder("testing123")}
       select {
       case producer.Input() <- message:
           enqueued++

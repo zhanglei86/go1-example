@@ -27,7 +27,7 @@ func main() {
   ProducerLoop:
   for {
       select {
-      case producer.Input() <- &sarama.ProducerMessage{Topic: "my_topic", Key: nil, Value: sarama.StringEncoder("testing123")}:
+      case producer.Input() <- &sarama.ProducerMessage{Topic: "myTopic", Key: nil, Value: sarama.StringEncoder("testing123")}:
           enqueued++
       case err := <-producer.Errors():
           log.Println("Failed to produce message", err)
