@@ -5,6 +5,7 @@ import (
   "github.com/Shopify/sarama"
   "log"
   "os"
+  "os/signal"
 )
 
 func main() {
@@ -21,11 +22,11 @@ func main() {
 
   // Trap SIGINT to trigger a shutdown.
   signals := make(chan os.Signal, 1)
-  //signal.Notify(signals, os.Interrupt)
+  signal.Notify(signals, os.Interrupt)
 
   var enqueued, errors int
   ProducerLoop:
-  for {
+  for num := 0; num < 10; num++ {
       select {
       case producer.Input() <- &sarama.ProducerMessage{Topic: "myTopic", Key: nil, Value: sarama.StringEncoder("testing123")}:
           enqueued++

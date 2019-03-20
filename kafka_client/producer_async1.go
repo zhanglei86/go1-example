@@ -5,6 +5,7 @@ import (
   "github.com/Shopify/sarama"
   "log"
   "os"
+  "os/signal"
   "sync"
 )
 
@@ -18,7 +19,7 @@ func main() {
 
   // Trap SIGINT to trigger a graceful shutdown.
   signals := make(chan os.Signal, 1)
-  //signal.Notify(signals, os.Interrupt)
+  signal.Notify(signals, os.Interrupt)
 
   var (
       wg sync.WaitGroup
@@ -43,7 +44,7 @@ func main() {
   }()
 
   ProducerLoop:
-  for {
+  for num := 0; num < 10; num++ {
       message := &sarama.ProducerMessage{Topic: "myTopic", Value: sarama.StringEncoder("testing123")}
       select {
       case producer.Input() <- message:
@@ -56,6 +57,5 @@ func main() {
   }
 
   wg.Wait()
-
   log.Printf("Successfully produced: %d; errors: %d\n", successes, errors)
 }
